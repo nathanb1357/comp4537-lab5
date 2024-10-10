@@ -26,7 +26,7 @@ document.getElementById('query-button').addEventListener('click', () => {
 
     if (query.startsWith('SELECT')) {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', serverAddress + `/query?data=` + query, true);
+        xhr.open('GET', serverAddress + `/?query=` + query, true);
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {

@@ -1,5 +1,6 @@
 import http from 'http';
 import mysql from 'mysql';
+import url from 'url';
 
 
 const HOST = 'localhost';
@@ -30,12 +31,10 @@ class Database {
 
     initializeTable() {
         const createTableQuery = (
-            `CREATE TABLE IF NOT EXISTS patient (
-                id INT AUTO_INCREMENT PRIMARY KEY,
+            `CREATE TABLE IF NOT EXISTS Patient (
+                patientid INT(11) AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(100),
-                age INT,
-                gender VARCHAR(10),
-                condition VARCHAR(255)
+                dateOfBirth DATETIME
             ) ENGINE=InnoDB;`
         );
         this.connection.query(createTableQuery, (err, result) => {
@@ -80,7 +79,20 @@ class Server {
     }
 
     handleGet(req, res) {
-        
+        const parsedUrl = url.parse(req.url, true);
+        const query = parsedUrl.query.query;
+
+        if (/SELECT/i.test(query)) {
+            this.db.query(query, (err, result) => {
+                if (err) {
+                    this.sendResponse(res, 400, {message: err.message});
+                } else {
+                    this.sendResponse(res, 200, JSON.stringify({result}));
+                }
+            });
+        } else {
+            this.sendResponse(res, 400, {message: 'Only SELECT queries allowed in GET requests.'});
+        }
     }
 
     sendResponse(res, statusCode, data) {
@@ -88,3 +100,9 @@ class Server {
         res.end(JSON.stringify(data));
     }
 }
+
+const db = new Database();
+db.connect();
+
+const server = new Server(db);
+server.start();
