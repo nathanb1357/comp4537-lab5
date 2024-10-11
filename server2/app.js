@@ -7,7 +7,7 @@ const HOST = 'localhost';
 const DOMAINS = '*';
 const PORT = 3001;
 const USER = 'root';
-const PASS = 'hi';
+const PASS = '';
 const DB_NAME = 'PatientDB';
 
 
@@ -50,9 +50,7 @@ class Database {
 
 
 class Server {
-    constructor(host, port, db) {
-        this.host = host;
-        this.port = port;
+    constructor(db) {
         this.db = db;
     }
 
@@ -69,13 +67,33 @@ class Server {
             } else {
                 this.sendResponse(res, 405, {message: 'Method not allowed'});
             }
-        }).listen(this.port, this.host, () => {
-            console.log(`Server listening on https://${this.host}:${this.port}`);
+        }).listen(PORT, HOST, () => {
+            console.log(`Server listening on https://${HOST}:${PORT}`);
         });
     }
 
     handlePost(req, res) {
+        let body = '';
+        req.on('data', chunk => {
+            body += chunk.toString();
+        });
 
+        req.on('end', () => {
+            const data = JSON.parse(body);
+            const query = data.query;
+
+            if (/INSERT/i.test(query)) {
+                this.db.query(query, (err, result) => {
+                    if (err) {
+                        this.sendResponse(res, 400, {message: err.message});
+                    } else {
+                        this.sendResponse(res, 200, JSON.stringify({result}));
+                    }
+                });
+            } else {
+                this.sendResponse(res, 405, {message: 'Only INSERT queries allowed in POST requests.'});
+            }
+        });
     }
 
     handleGet(req, res) {
@@ -91,7 +109,7 @@ class Server {
                 }
             });
         } else {
-            this.sendResponse(res, 400, {message: 'Only SELECT queries allowed in GET requests.'});
+            this.sendResponse(res, 405, {message: 'Only SELECT queries allowed in GET requests.'});
         }
     }
 
