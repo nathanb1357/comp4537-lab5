@@ -1,6 +1,6 @@
-import http from 'http';
-import mysql from 'mysql';
-import url from 'url';
+const http = require('http');
+const mysql = require('mysql');
+const url = require('url');
 
 
 const HOST = 'localhost';
