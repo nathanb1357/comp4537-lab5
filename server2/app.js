@@ -58,7 +58,7 @@ class Server {
         http.createServer((req, res) => {
             const method = req.method;
             res.setHeader('Access-Control-Allow-Origin', DOMAINS);
-            res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
 
             if (method === 'POST') {
                 this.handlePost(req, res);
