@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const url = require('url');
 
 
-const HOST = 'localhost';
+const HOST = '0.0.0.0';
 const DOMAINS = '*';
 const PORT = 3001;
 const USER = 'dbuser';
