@@ -6,8 +6,8 @@ const url = require('url');
 const HOST = 'localhost';
 const DOMAINS = '*';
 const PORT = 3001;
-const USER = 'root';
-const PASS = 'pass';
+const USER = 'dbuser';
+const PASS = 'SayCheese2!';
 const DB_NAME = 'PatientDB';
 
 
