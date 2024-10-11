@@ -64,6 +64,8 @@ class Server {
                 this.handlePost(req, res);
             } else if (req.method === 'GET') {
                 this.handleGet(req, res);
+            } else if (req.method === 'OPTIONS') {
+                this.sendResponse(res, 204, null);
             } else {
                 this.sendResponse(res, 405, {message: 'Method not allowed'});
             }
