@@ -7,7 +7,7 @@ const HOST = 'localhost';
 const DOMAINS = '*';
 const PORT = 3001;
 const USER = 'root';
-const PASS = '';
+const PASS = 'pass';
 const DB_NAME = 'PatientDB';
 
 
