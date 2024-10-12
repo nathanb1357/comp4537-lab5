@@ -59,11 +59,14 @@ class Server {
             const method = req.method;
             res.setHeader('Access-Control-Allow-Origin', DOMAINS);
             res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+            res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
             if (method === 'POST') {
                 this.handlePost(req, res);
             } else if (req.method === 'GET') {
                 this.handleGet(req, res);
+            } else if (req.method === 'OPTIONS') {
+                this.sendResponse(res, 204, null);
             } else {
                 this.sendResponse(res, 405, {message: 'Method not allowed'});
             }
