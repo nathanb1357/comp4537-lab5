@@ -30,7 +30,7 @@ class Database {
                 dateOfBirth DATETIME
             ) ENGINE=InnoDB;`
         );
-        this.connection.query(createTableQuery, (err, result) => {
+        this.query(createTableQuery, (err, result) => {
             if (err) throw err;
             console.log('Patient table ready.');
         });
