@@ -58,6 +58,7 @@ class Database {
 class Server {
     constructor(db) {
         this.db = db;
+        this.db.initializeTable();
     }
 
     start() {
@@ -129,7 +130,5 @@ class Server {
 }
 
 const db = new Database();
-db.connect();
-
 const server = new Server(db);
 server.start();
