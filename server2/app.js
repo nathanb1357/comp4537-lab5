@@ -13,19 +13,12 @@ const DB_NAME = 'PatientDB';
 
 class Database {
     constructor() {
-        this.connection = mysql.createConnection({
+        this.pool = mysql.createPool({
+            connectionLimit: 10, // Maximum number of connections in the pool
             host: HOST,
             user: USER,
             password: PASS,
             database: DB_NAME
-        });
-    }
-
-    connect() {
-        this.connection.connect(err => {
-            if (err) throw err;
-            console.log('Connected to MySQL database.');
-            this.initializeTable();
         });
     }
 
@@ -44,7 +37,20 @@ class Database {
     }
 
     query(sql, callback) {
-        this.connection.query(sql, callback);
+        this.pool.getConnection((err, connection) => {
+            if (err) {
+                callback(err, null);
+                return;
+            }
+            connection.query(sql, (queryErr, result) => {
+                connection.release();
+                if (queryErr) {
+                    callback(queryErr, null);
+                } else {
+                    callback(null, result);
+                }
+            })
+        });
     }
 }
 
