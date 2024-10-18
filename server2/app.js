@@ -58,7 +58,6 @@ class Database {
 class Server {
     constructor(db) {
         this.db = db;
-        this.db.initializeTable();
     }
 
     start() {
@@ -83,6 +82,7 @@ class Server {
     }
 
     handlePost(req, res) {
+        this.db.initializeTable();
         let body = '';
         req.on('data', chunk => {
             body += chunk.toString();
@@ -107,6 +107,7 @@ class Server {
     }
 
     handleGet(req, res) {
+        this.db.initializeTable();
         const parsedUrl = url.parse(req.url, true);
         const query = parsedUrl.query.query;
 
